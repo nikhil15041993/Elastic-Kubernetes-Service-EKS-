@@ -4,10 +4,10 @@ The cluster autoscaler automatically launches additional worker nodes if more re
 
 ## create nodegroup with autoscaler enabled
 
-Create a yml file eg: cluster-auto-scale.yml 
+Create a yml file eg: eks-course.yaml 
 
 ```
-cluster-auto-scale.yml
+eks-course.yaml
 ======================
 
 
@@ -70,7 +70,6 @@ availabilityZones: ["us-east-1c", "us-east-1d"]
 ```bash
 eksctl create nodegroup --config-file=eks-course.yaml
 
-eksctl delete nodegroup --cluster=EKS-course-cluster --name=ng-1 --approve
 ```
 
 ckeck the newly created nodes by using

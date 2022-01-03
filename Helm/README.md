@@ -18,4 +18,34 @@ helm repo add stable https://kubernetes-charts.storage.googleapis.com/
 creted a repositary with name stable.
 
 to check the newly created repositary
-``` yem repo list ```
+``` heml repo list ```
+
+
+## Get All charts
+
+```
+helm search repo 
+```
+
+To install specifice application in the chart 
+
+```
+helm install redis-test stable/redis
+
+```
+To check the installation is succesfull 
+
+```
+kubectl get pods
+```
+Get the all charts we deployed
+```
+helm ls
+```
+
+## Uninstall 
+
+```
+hel uninstall <ackage-name>
+```
+

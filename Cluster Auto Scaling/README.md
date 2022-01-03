@@ -32,6 +32,8 @@ nodeGroups:
       instance-type: onDemand
     ssh: # use existing EC2 key
       publicKeyName: eks-course
+      
+      
   - name: scale-east1d
     instanceType: t2.small
     desiredCapacity: 1
@@ -45,6 +47,8 @@ nodeGroups:
       instance-type: onDemand
     ssh: # use existing EC2 key
       publicKeyName: eks-course
+      
+      
   - name: scale-spot
     desiredCapacity: 1
     maxSize: 10

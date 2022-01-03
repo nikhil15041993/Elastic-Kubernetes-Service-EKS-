@@ -181,7 +181,7 @@ kubectl get pods
 ```
 check the node also ```kubectl get nodes -l instance-type=spot```
 
-in our spot node we using t3 small instance so in that instance having 4gb RAM so we can set 3 nginx pods configure on```nginx-deployment.yaml``.
+in our spot node we using t3 small instance so in that instance having 2gb RAM so we can set 3 nginx pods configure on```nginx-deployment.yaml``.
 if we increse the repleca as 4 the new node will create and add the pods on it 
 
 ```bash

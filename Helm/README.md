@@ -27,10 +27,10 @@ to check the newly created repositary
 helm search repo 
 ```
 
-To install specifice application in the chart 
+To install specific package in the chart 
 
 ```
-helm install redis-test stable/redis
+helm install <package-name> stable/redis
 
 ```
 To check the installation is succesfull 
@@ -46,6 +46,6 @@ helm ls
 ## Uninstall 
 
 ```
-hel uninstall <ackage-name>
+hel uninstall <package-name>
 ```
 

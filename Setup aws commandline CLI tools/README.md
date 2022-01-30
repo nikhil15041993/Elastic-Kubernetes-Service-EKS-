@@ -48,14 +48,20 @@ for non-Linux OS you can find a binary download here:
 
 https://github.com/weaveworks/eksctl/releases
 
-on Linux, you can just execute:
+To install or upgrade eksctl on Linux using curl
 
-```bash
-curl --silent --location "https://github.com/weaveworks/eksctl/releases/download/latest_release/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp  
-
+Download and extract the latest release of eksctl with the following command.
+```
+curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
+```
+Move the extracted binary to /usr/local/bin.
+```
 sudo mv /tmp/eksctl /usr/local/bin
 ```
-
+Test that your installation was successful with the following command.
+```
+eksctl version
+```
 This utility will use the same _credentials_ file as we explored for the AWS cli, located under '~/.aws/credentials'
 
 ## Test

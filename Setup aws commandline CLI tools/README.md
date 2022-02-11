@@ -67,6 +67,15 @@ This utility will use the same _credentials_ file as we explored for the AWS cli
 ## Test
 ```eksctl version```
 
+## Create a kubeconfig for Amazon EKS
+
+```
+aws eks update-kubeconfig --region region-code --name cluster-name
+```
+Test your configuration.
+```
+kubectl get svc
+```
 
 # kubectl - the commandline K8s tool
 

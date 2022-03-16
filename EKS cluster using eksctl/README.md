@@ -61,3 +61,10 @@ eksctl create cluster -f my-first-eksctl.yml
 
 ```
 
+## Scaling Managed Nodegroups
+eksctl scale nodegroup also supports managed nodegroups. The syntax for scaling a managed or unmanaged nodegroup is the same.
+
+```
+eksctl scale nodegroup --name=managed-ng-1 --cluster=managed-cluster --nodes=4 --nodes-min=3 --nodes-max=5
+```
+

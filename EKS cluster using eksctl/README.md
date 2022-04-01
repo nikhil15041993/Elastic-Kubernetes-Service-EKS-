@@ -11,7 +11,7 @@ metadata:
   name: EKS-course-cluster
   region: us-east-1
 
-nodeGroups:
+managedNodeGroups:
   - name: ng-1
     instanceType: t2.small
     desiredCapacity: 3

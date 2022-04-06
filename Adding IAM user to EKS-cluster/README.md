@@ -37,6 +37,28 @@ check which user is currently active
 
 ```bash
 aws sts get-caller-identity
+
 export AWS_PROFILE="clusteradmin"
+
 aws sts get-caller-identity
 ```
+Check whether is user is successfully  configured by using 
+
+### listing the resource 
+```
+kubectl get nodes
+
+kubectl get pods..
+
+etc....
+
+```
+### configuring the resource
+
+
+```
+kubectl run nginx --image=nginx --restart=Never
+```
+
+
+

@@ -25,7 +25,7 @@ edit the yaml file and add a "mapUsers" section
 
 add user to ~/.aws/credentials by creating a new section
 
-```bash
+```
 [clusteradmin]
 aws_access_key_id=.....
 aws_secret_access_key=.....
@@ -35,7 +35,7 @@ output=json
 
 check which user is currently active
 
-```bash
+```
 aws sts get-caller-identity
 
 export AWS_PROFILE="clusteradmin"

@@ -68,3 +68,41 @@ eksctl scale nodegroup also supports managed nodegroups. The syntax for scaling 
 eksctl scale nodegroup --name=managed-ng-1 --cluster=managed-cluster --nodes=4 --nodes-min=3 --nodes-max=5
 ```
 
+## craete mix of on-demand and spot instance using eksctl
+
+```
+   apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: EKS-course-cluster
+  region: us-east-1
+
+nodeGroups:
+  - name: ng-1
+    instanceType: t2.small
+    desiredCapacity: 3
+    ssh: # use existing EC2 key
+      publicKeyName: eks-course
+      
+      
+  - name: ng-mixed
+    minSize: 3
+    maxSize: 5
+    instancesDistribution:
+      maxPrice: 0.2
+      instanceTypes: ["t2.small", "t3.small"]
+      onDemandBaseCapacity: 0
+      onDemandPercentageAboveBaseCapacity: 50
+    ssh: 
+      publicKeyName: eks-course
+      
+    ```  
+    
+    here we dont need to use ekscle create -f <filename> . we just want to update our previous eks cluster so we can use following command 
+    
+    ```
+    ekscrl create nodegroup --config-file=<my-first-eksctl.yml> --include='ng-mixed' 
+    ```
+    
+    

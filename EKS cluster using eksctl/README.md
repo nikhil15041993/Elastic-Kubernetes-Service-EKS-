@@ -68,7 +68,7 @@ eksctl scale nodegroup also supports managed nodegroups. The syntax for scaling 
 eksctl scale nodegroup --name=managed-ng-1 --cluster=managed-cluster --nodes=4 --nodes-min=3 --nodes-max=5
 ```
 
-## craete mix of on-demand and spot instance using eksctl
+## Create mix of on-demand and spot instance using eksctl
 
 ```
    apiVersion: eksctl.io/v1alpha5

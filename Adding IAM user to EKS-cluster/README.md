@@ -76,7 +76,7 @@ kubectl create namespace production
 
 ### create role yml file and paste the following code
 
-role.yml
+### role.yml
 ========
 ```
 kind: Role
@@ -94,7 +94,7 @@ save it
 
 ### create  role binding yml file 
 
-rolebinding.yaml
+### rolebinding.yaml
 ================
 
 ```

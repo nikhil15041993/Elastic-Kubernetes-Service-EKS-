@@ -71,7 +71,7 @@ eksctl scale nodegroup --name=managed-ng-1 --cluster=managed-cluster --nodes=4 -
 ## Create mix of on-demand and spot instance using eksctl
 
 ```
-   apiVersion: eksctl.io/v1alpha5
+apiVersion: eksctl.io/v1alpha5
 kind: ClusterConfig
 
 metadata:
@@ -96,8 +96,7 @@ nodeGroups:
       onDemandPercentageAboveBaseCapacity: 50
     ssh: 
       publicKeyName: eks-course
-      
-    ```  
+```  
     
     here we dont need to use ekscle create -f <filename> . we just want to update our previous eks cluster so we can use following command 
     

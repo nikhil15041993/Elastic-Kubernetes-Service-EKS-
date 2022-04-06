@@ -127,7 +127,7 @@ kubectl -n kube-system get configmap aws-auth -o yaml > aws-auth-configmap.yaml
 move on to the mapUser section and add the user details
 
 ```
- mapUsers: |
+  mapUsers: |
     - userarn: arn:aws:iam::xxxxxxxxx:user/k8s-cluster-admin
       username: k8s-cluster-admin
       groups:
@@ -138,13 +138,13 @@ move on to the mapUser section and add the user details
       groups:
         - <iam role>
         
-    ```
+```
     
     Apply the aws-auth-configmap.yaml file
     
-    ```
+```
     kubectl apply -f aws-auth-configmap.yaml
-    ```
+```
     
    add user to ~/.aws/credentials by creating a new section
 
@@ -158,21 +158,21 @@ output=json
 
 check which user is currently active
 
-```bash
-aws sts get-caller-identity
+```
+  aws sts get-caller-identity
 
-export AWS_PROFILE="production"
+  export AWS_PROFILE="production"
 
-aws sts get-caller-identity
+  aws sts get-caller-identity
 ```
 Check whether is user is successfully  configured by using 
 
 ```
-kubectl get nodes
+ kubectl get nodes
 ```
 
 ```
-kubectl -n kube-system get pods
+ kubectl -n kube-system get pods
 ```
 Change the user to cluster admin ```export AWS_PROFILE="production"``` now we can crete and list the resoures
 

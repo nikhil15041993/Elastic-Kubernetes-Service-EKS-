@@ -98,10 +98,10 @@ nodeGroups:
       publicKeyName: eks-course
 ```  
     
-    here we dont need to use ekscle create -f <filename> . we just want to update our previous eks cluster so we can use following command 
+here we dont need to use ekscle create -f <filename> . we just want to update our previous eks cluster so we can use following command 
     
-    ```
-    ekscrl create nodegroup --config-file=<my-first-eksctl.yml> --include='ng-mixed' 
-    ```
+```
+ekscrl create nodegroup --config-file=<my-first-eksctl.yml> --include='ng-mixed' 
+```
     
     

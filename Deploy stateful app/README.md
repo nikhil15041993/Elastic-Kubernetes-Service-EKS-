@@ -41,9 +41,10 @@ A stateful app can then request a volume, by specifying a _persistent volume cla
    ```
    check again:
     ```
-     kubectl get storageclasses --namespace=ns-eks-course
+      kubectl get storageclasses --namespace=ns-eks-course
     ```
- 2. define a persistent volume claim
+2. define a persistent volume claim
+
    ```
     kubectl apply -f pvcs.yaml --namespace=ns-eks-course
    ```

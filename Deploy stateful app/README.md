@@ -34,11 +34,12 @@ A stateful app can then request a volume, by specifying a _persistent volume cla
    ```
     kubectl get storageclasses --namespace=ns-eks-course
    ```
-    set default:
+  set default:
+    
    ```
     kubectl patch storageclass gp2 -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}' --namespace=ns-eks-course
    ```
-    check again:
+   check again:
     ```
      kubectl get storageclasses --namespace=ns-eks-course
     ```
@@ -48,5 +49,5 @@ A stateful app can then request a volume, by specifying a _persistent volume cla
    ```
    and check:
    ```
-   kubectl get pvc --namespace=ns-eks-course
+    kubectl get pvc --namespace=ns-eks-course
    ``` 

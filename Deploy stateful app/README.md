@@ -43,8 +43,7 @@ A stateful app can then request a volume, by specifying a _persistent volume cla
     ```
       kubectl get storageclasses --namespace=ns-eks-course
     ```
-    
-    
+     
     
  2. define a persistent volume claim
 
@@ -55,3 +54,12 @@ A stateful app can then request a volume, by specifying a _persistent volume cla
    ```
     kubectl get pvc --namespace=ns-eks-course
    ``` 
+   
+   
+   ## Deploy MYSQL Backend
+   
+   First we have to create a secret form mysql
+   
+   ```
+   ```
+   

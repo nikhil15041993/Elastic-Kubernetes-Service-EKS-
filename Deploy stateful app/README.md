@@ -27,19 +27,20 @@ A stateful app can then request a volume, by specifying a _persistent volume cla
     *parameters: Forbidden: updates to parameters are forbidden.*  
     *reclaimPolicy: Forbidden: updates to reclaimPolicy are forbidden.*  
     
-   set this storage class as *default* !
+   set this storage class as *default* 
    
    check current situation:
-    ```
+   
+   ```
     kubectl get storageclasses --namespace=ns-eks-course
-    ```
+   ```
     set default:
-    ```
+   ```
     kubectl patch storageclass gp2 -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}' --namespace=ns-eks-course
-    ```
+   ```
     check again:
     ```
-    kubectl get storageclasses --namespace=ns-eks-course
+     kubectl get storageclasses --namespace=ns-eks-course
     ```
  2. define a persistent volume claim
    ```

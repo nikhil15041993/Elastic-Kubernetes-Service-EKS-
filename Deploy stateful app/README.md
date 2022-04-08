@@ -56,7 +56,7 @@ A stateful app can then request a volume, by specifying a _persistent volume cla
    ``` 
    
    
-   ## 3.  Deploy MYSQL Backend
+  ## 3.  Deploy MYSQL Backend
    
    First we have to create a secret form mysql
    
@@ -65,15 +65,16 @@ A stateful app can then request a volume, by specifying a _persistent volume cla
    ```
    
    check:
-   ```
-      kubectl get secrets --namespace=ns-eks-course
-   ```
+      ```
+       kubectl get secrets --namespace=ns-eks-course
+      ```
    
-   ## Launch mysql deployment
+  ## 4. Launch mysql deployment
    
-    ```
-     kubectl apply -f deploy-mysql.yaml --namespace=ns-eks-course
-    ```
+   
+      ```
+      kubectl apply -f deploy-mysql.yaml --namespace=ns-eks-course
+      ```
     
     
    ## checks

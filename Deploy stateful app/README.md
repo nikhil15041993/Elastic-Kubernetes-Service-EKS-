@@ -92,13 +92,12 @@ A stateful app can then request a volume, by specifying a _persistent volume cla
     
     
    ## deploy wordpress
-    
-    
-    ```
+
      kubectl apply -f deploy-wordpress.yaml --namespace=<namespace>
-    ```
+    
+    
    get URL of the app:
    
-    ```
+    
      kubectl describe service wordpress --namespace=<namespace> | grep Ingress
-    ```
+    

@@ -71,10 +71,9 @@ A stateful app can then request a volume, by specifying a _persistent volume cla
    
   ## 4. Launch mysql deployment
    
-   
-      ```
+  
       kubectl apply -f deploy-mysql.yaml --namespace=ns-eks-course
-      ```
+    
     
     
    ## checks

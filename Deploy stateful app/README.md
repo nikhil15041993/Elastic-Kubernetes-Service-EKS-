@@ -81,11 +81,11 @@ A stateful app can then request a volume, by specifying a _persistent volume cla
     * persistent volume claims
     * pods
     
-    ```
+  
      kubectl get pv --namespace=<namespace>
      kubectl get pvc --namespace=<namespace>
      kubectl get pods -o wide --namespace=<namepsce>
-    ```
+   
    
       * EBS volumes
         goto AWS mgm console => EC2 => Elastic Block store => volumes

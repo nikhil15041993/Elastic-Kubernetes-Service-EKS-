@@ -34,3 +34,18 @@ Delete Cluster
 eksctl delete cluster <clusterName>
 eksctl delete cluster eksdemo1
 ```
+
+
+
+
+You get this error because you're getting blocked by RBAC policies. Basically, RBAC policies set to restrict the resources you use and limits a few of your action. 
+
+There are two possibilities, either you haven't created an RBAC or it's somehow restricting the cluster access.
+
+By default, your clusterrolebinding has system:anonymous set which blocks the cluster access.
+
+Execute the following command, it will set a clusterrole as cluster-admin which will give you the required access.
+
+```
+kubectl create clusterrolebinding cluster-system-anonymous --clusterrole=cluster-admin --user=system:anonymous
+```

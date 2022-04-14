@@ -38,6 +38,26 @@ eksctl delete cluster eksdemo1
 
 
 
+If you get error like this 
+==========================
+```
+{
+  "kind": "Status",
+  "apiVersion": "v1",
+  "metadata": {
+    
+  },
+  "status": "Failure",
+  "message": "forbidden: User \"system:anonymous\" cannot get path \"/\"",
+  "reason": "Forbidden",
+  "details": {
+    
+  },
+  "code": 403
+}
+```
+
+
 You get this error because you're getting blocked by RBAC policies. Basically, RBAC policies set to restrict the resources you use and limits a few of your action. 
 
 There are two possibilities, either you haven't created an RBAC or it's somehow restricting the cluster access.

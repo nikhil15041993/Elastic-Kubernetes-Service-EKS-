@@ -92,12 +92,81 @@ kubectl -n kube-system edit deployment.apps/cluster-autoscaler
 * set the image version at property   image=k8s.gcr.io/cluster-autoscaler:vx.yy.z 
 * set your EKS cluster name at the end of property   - --node-group-auto-discovery=asg:tag=k8s.io/cluster-autoscaler/enabled,k8s.io/cluster-autoscaler/<<EKS cluster name>> 
   
-  ### view cluster autoscaler logs
+### view cluster autoscaler logs
   
   ```
   kubectl -n kube-system logs deployment.apps/cluster-autoscaler
   ```
   
-  ### Test the autoscaler
+### Test the autoscaler
 
- create a deployment of nginx
+create a deployment of nginx
+
+ ```
+ kubectl apply -f nginx-deployment.yaml
+ ```
+ nginx-deployment.yaml
+ ```
+ apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: test-autoscaler
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        service: nginx
+        app: nginx
+    spec:
+      containers:
+      - image: nginx
+        name: test-autoscaler
+        resources:
+          limits:
+            cpu: 300m
+            memory: 512Mi
+          requests:
+            cpu: 300m
+            memory: 512Mi
+      nodeSelector:
+        instance-type: spot
+ ```
+ to chek if the pods is running 
+ ```
+ kubectl get pods
+ ```
+ to view our spot instance details which th pod is running
+ ```
+ kubectl get nodes -l instance-type=spot
+ ```
+ Next we are going to scale the pods in this instance from 1 to 3 
+ ```
+ kubectl scale --replicas=3 deployment/test-autoscaler
+ ```
+ to check the pods 
+
+ ``` kubectl get pods -o wide --watch ```
+
+ Here we can see that the pods are incremented from 1 to 3 and all poda are in running state.
+ 
+To test the auto scaler we need to incress the pods size. if the instance have above its capacity it will create a new instance (node).
+ 
+ ```
+ kubectl scale --replicas=4 deployment/test-autoscaler
+ ```
+ to view our spot instance details which th pod is running
+ ```
+ kubectl get nodes -l instance-type=spot
+ ```
+ We can see that now we have 2 spot instance. because in on2 spot instance the maxium pod capacity is 3.
+
+If we reduce the number of replica the newly creted instance will terminated.  
+
+view cluster autoscaler logs
+ 
+```
+kubectl -n kube-system logs deployment.apps/cluster-autoscaler | grep -A5 "Expanding Node Group"
+
+kubectl -n kube-system logs deployment.apps/cluster-autoscaler | grep -A5 "removing node"
+ ```

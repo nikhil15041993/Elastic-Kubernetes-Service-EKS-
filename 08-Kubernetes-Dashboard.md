@@ -15,6 +15,31 @@ kubectl get all -n kubernetes-dashboard
 ```
 kubectl apply -f admin-service-account.yaml
 ```
+
+admin-service-account.yaml
+```
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: eks-course-admin
+  namespace: kube-system
+
+---
+  
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: eks-course-admin
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+- kind: ServiceAccount
+  name: eks-course-admin
+  namespace: kube-system
+```
+  
 ### access the dashboard
 
 * get a security token

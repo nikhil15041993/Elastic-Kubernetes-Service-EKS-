@@ -132,3 +132,88 @@ kubectl apply -f redis-follower-service.yaml
 kubectl get pods
 kubectl get services
 ```
+
+
+## Frontend app
+
+deploy the PHP Frontend pods and a _service_ of type **LoadBalancer** on top of it, to expose the loadbalanced service to the public via ELB:
+
+frontend-deployment.yaml
+```
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+        app: guestbook
+        tier: frontend
+  template:
+    metadata:
+      labels:
+        app: guestbook
+        tier: frontend
+    spec:
+      containers:
+      - name: php-redis
+        image: gcr.io/google_samples/gb-frontend:v5
+        env:
+        - name: GET_HOSTS_FROM
+          value: "dns"
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+        ports:
+        - containerPort: 80
+```
+DEploay the frontend deployment
+```
+kubectl apply -f frontend-deployment.yaml
+```
+
+Service 
+
+frontend-service.yaml
+```
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+  labels:
+    app: guestbook
+    tier: frontend
+spec:
+  # if your cluster supports it, uncomment the following to automatically create
+  # an external load-balanced IP for the frontend service.
+  # type: LoadBalancer
+  type: LoadBalancer
+  ports:
+    # the port that this service should serve on
+  - port: 80
+  selector:
+    app: guestbook
+    tier: frontend
+ ```
+```
+kubectl apply -f frontend-service.yaml
+```
+
+
+some checks:
+```
+kubectl get pods
+kubectl get pods -l app=guestbook
+kubectl get pods -l app=guestbook -l tier=frontend
+```
+
+check AWS mgm console for the ELB which has been created !!!
+
+## Access from outside the cluster
+grab the public DNS of the frontend service LoadBalancer (ELB):
+```
+kubectl describe service frontend
+```
+copy the name and paste it into your browser !!!

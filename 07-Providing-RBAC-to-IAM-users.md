@@ -122,7 +122,7 @@ mapUsers: |
     - userarn: arn:aws:iam::xxxxxxxxx:user/k8s-production
       username: k8s-production
       groups:
-        - system:k8s-production-role
+        - system:prod-viewer-role
 ```
 
 Then apply the changes.

@@ -44,6 +44,16 @@ subjects:
 
 * get a security token
 
+n Kubernetes 1.24, you need to manually create the Secret; the token key in the data field will be automatically set for you.
+```
+apiVersion: v1
+kind: Secret
+metadata:
+  name: sa1-token
+  annotations:
+    kubernetes.io/service-account.name: service-account-name
+type: kubernetes.io/service-account-token
+```
 ```
 kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | grep eks-admin | awk '{print $1}')
 ```

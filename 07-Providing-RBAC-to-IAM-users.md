@@ -71,15 +71,15 @@ kubectl create namespace production
  
 role.yaml
 ```
+apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
-apiVersion: rbac.authorization.k8s.io/v1beta1
 metadata:
-  namespace: production
-  name: prod-viewer-role
+  namespace: production
+  name: prod-viewer-role
 rules:
 - apiGroups: ["", "extensions", "apps"]
-  resources: ["*"]  # can be further limited, e.g. ["deployments", "replicasets", "pods"]
-  verbs: ["get", "list", "watch"]
+  resources: ["deployments", "replicasets", "pods"]
+  verbs: ["get", "watch", "list"]
   
 ```
 ### step 4 create rolebinding

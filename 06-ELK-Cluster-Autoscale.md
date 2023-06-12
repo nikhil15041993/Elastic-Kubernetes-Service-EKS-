@@ -111,31 +111,31 @@ create a deployment of nginx
  apiVersion: apps/v1
 kind: Deployment
 metadata:
- name: test-autoscaler
- labels:
-   app: nginx
+  name: nginx-container
+  labels:
+    app: nginx
 spec:
- replicas: 1
- selector:
-    matchLabels:
-      app: nginx
- template:
-   metadata:
-     labels:
-       app: nginx
-   spec:
-     containers:
-     - image: nginx
-       name: test-autoscaler
-       resources:
-         limits:
-           cpu: 300m
-           memory: 512Mi
-         requests:
-           cpu: 300m
-           memory: 512Mi
-     nodeSelector:
-       instance-type: onDemand
+  replicas: 1
+  selector:
+   matchLabels:
+     app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - image: nginx
+        name: nginx-container
+        resources:
+          limits:
+            cpu: 300m
+            memory: 512Mi
+          requests:
+            cpu: 300m
+            memory: 512Mi
+      nodeSelector:
+        instance-type: ng-mixed1
 
  ```
  to chek if the pods is running 

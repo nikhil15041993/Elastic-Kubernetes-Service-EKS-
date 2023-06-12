@@ -32,6 +32,7 @@ kubectl get all -n rbac-test
 
 ## Create IAM user and create access key
 aws iam create-user --user-name rbac-user
+
 aws iam create-access-key --user-name rbac-user
 
 ## We will use these set onther context with using above credentials

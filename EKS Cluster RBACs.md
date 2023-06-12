@@ -39,14 +39,52 @@ AWS configure.
 
 ## MAP AN IAM USER TO K8S
 kubectl apply -f .\aws-auth.yaml
-
+```
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: aws-auth
+  namespace: kube-system
+data:
+  mapUsers: |
+    - userarn: arn:aws:iam::357171621133:user/rbac-user
+      username: rbac-user
+```      
 ## Verify newly created user after login AND it should throw below errors
 kubectl get pods -n rbac-test
 
 ## Create a role and role binding from Admin access
 kubectl apply -f .\rbacuser-role.yaml
+```
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  namespace: rbac-test
+  name: pod-reader
+rules:
+- apiGroups: [""] # "" indicates the core API group
+  resources: ["pods"]
+  verbs: ["list","get","watch"]
+- apiGroups: ["extensions","apps"]
+  resources: ["deployments"]
+  verbs: ["get", "list", "watch"]
+  ```
 kubectl apply -f .\rbacuser-role-binding.yaml
-
+```
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: read-pods
+  namespace: rbac-test
+subjects:
+- kind: User
+  name: rbac-user
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: Role
+  name: pod-reader
+  apiGroup: rbac.authorization.k8s.io
+ ```
 ## login with Kubernetes user again
 ## Verify newly created user after login AND it should Not throw any errors
 kubectl get pods -n rbac-test

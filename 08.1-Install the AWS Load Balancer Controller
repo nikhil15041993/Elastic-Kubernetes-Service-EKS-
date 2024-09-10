@@ -1,6 +1,4 @@
-Here's how you can structure the provided instructions into a suitable GitHub README file format:
 
-```markdown
 # Installing AWS ALB Ingress Controller in EKS Cluster
 
 This guide explains how to install and configure the AWS ALB Ingress Controller in your EKS cluster using Helm.
@@ -16,7 +14,7 @@ This guide explains how to install and configure the AWS ALB Ingress Controller 
 
 Run the following command to add the AWS Helm repository and update it:
 
-```bash
+```
 helm repo add eks https://aws.github.io/eks-charts
 helm repo update
 ```
@@ -25,7 +23,7 @@ helm repo update
 
 Run this command to associate an IAM OIDC provider with your cluster:
 
-```bash
+```
 eksctl utils associate-iam-oidc-provider --region <your-region> --cluster <your-cluster-name> --approve
 ```
 
@@ -33,7 +31,7 @@ eksctl utils associate-iam-oidc-provider --region <your-region> --cluster <your-
 
 Download the necessary IAM policy and create it in your AWS account:
 
-```bash
+```
 curl -o iam_policy.json https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/main/docs/install/iam_policy.json
 aws iam create-policy --policy-name AWSLoadBalancerControllerIAMPolicy --policy-document file://iam_policy.json
 ```
@@ -42,7 +40,7 @@ aws iam create-policy --policy-name AWSLoadBalancerControllerIAMPolicy --policy-
 
 Create an IAM role and attach the policy for the ALB Ingress controller:
 
-```bash
+```
 eksctl create iamserviceaccount \
   --cluster=<your-cluster-name> \
   --namespace=kube-system \
@@ -55,7 +53,7 @@ eksctl create iamserviceaccount \
 
 Now, install the controller using Helm:
 
-```bash
+```
 helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
   --set clusterName=<your-cluster-name> \
   --set serviceAccount.create=false \
@@ -69,7 +67,7 @@ helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
 
 Ensure the controller is running successfully:
 
-```bash
+```
 kubectl get deployment -n kube-system aws-load-balancer-controller
 ```
 
@@ -113,7 +111,7 @@ Replace `my-service` with your actual service name.
 
 Apply the resource to your cluster:
 
-```bash
+```
 kubectl apply -f ingress.yaml
 ```
 
@@ -121,7 +119,7 @@ kubectl apply -f ingress.yaml
 
 Check if the ALB is created:
 
-```bash
+```
 kubectl get ingress my-ingress -o wide
 ```
 

@@ -1,0 +1,127 @@
+To install the AWS ALB Ingress Controller in your EKS cluster using Helm, follow these steps:
+
+### 1. **Prerequisites:**
+- Ensure that your EKS cluster is running.
+- Helm is installed on your local machine.
+- Your AWS credentials are configured.
+
+### 2. **Install the AWS Load Balancer Controller:**
+
+1. **Add the Helm repository:**
+   Run the following command to add the AWS Helm repository:
+   ```bash
+   helm repo add eks https://aws.github.io/eks-charts
+   helm repo update
+   ```
+
+2. **Create an IAM OIDC provider (if not already done):**
+   The ALB Ingress controller requires IAM roles to manage resources:
+   ```bash
+   eksctl utils associate-iam-oidc-provider --region <your-region> --cluster <your-cluster-name> --approve
+   ```
+
+3. **Create an IAM policy for the ALB controller:**
+   Download the IAM policy and create it in your account:
+   ```bash
+   curl -o iam_policy.json https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/main/docs/install/iam_policy.json
+   aws iam create-policy --policy-name AWSLoadBalancerControllerIAMPolicy --policy-document file://iam_policy.json
+   ```
+
+4. **Create an IAM role for the ALB Ingress controller:**
+   Attach the policy to the role and annotate your service account:
+   ```bash
+   eksctl create iamserviceaccount \
+     --cluster=<your-cluster-name> \
+     --namespace=kube-system \
+     --name=aws-load-balancer-controller \
+     --attach-policy-arn=arn:aws:iam::<account-id>:policy/AWSLoadBalancerControllerIAMPolicy \
+     --approve
+   ```
+
+5. **Install the AWS Load Balancer Controller via Helm:**
+   Now, you can install the ALB Ingress controller using Helm:
+   ```bash
+   helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
+     --set clusterName=<your-cluster-name> \
+     --set serviceAccount.create=false \
+     --set region=<your-region> \
+     --set vpcId=<your-vpc-id> \
+     --set serviceAccount.name=aws-load-balancer-controller \
+     -n kube-system
+   ```
+
+6. **Verify the installation:**
+   After the Helm installation, verify that the controller is running:
+   ```bash
+   kubectl get deployment -n kube-system aws-load-balancer-controller
+   ```
+
+This will deploy the AWS ALB Ingress controller in your EKS cluster, allowing you to use ALB as an Ingress for your services.
+
+Let me know if you need further assistance!
+
+
+
+
+AWS Load Balancer Controller has been successfully deployed, but you're not seeing the actual Application Load Balancer (ALB) in your AWS account. The ALB will only be created when a Kubernetes Ingress resource is applied in the cluster that triggers the controller to create it
+
+
+It seems like the AWS Load Balancer Controller has been successfully deployed, but you're not seeing the actual Application Load Balancer (ALB) in your AWS account. The ALB will only be created when a Kubernetes Ingress resource is applied in the cluster that triggers the controller to create it.
+
+To resolve this, follow these steps:
+
+### 1. **Ensure the Ingress Resource is Configured:**
+
+You need to create a Kubernetes `Ingress` resource that uses the `alb` ingress class. Below is an example of an Ingress resource that would trigger the AWS Load Balancer Controller to create an ALB.
+
+```yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: my-ingress
+  namespace: default
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing  # For public ALB
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'  # Add HTTPS if needed
+    alb.ingress.kubernetes.io/target-type: instance  # You can also use "ip"
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: my-service
+                port:
+                  number: 80
+```
+
+Replace `my-service` with the name of the Kubernetes service that should be exposed by the ALB.
+
+### 2. **Apply the Ingress Resource:**
+
+Run the following command to apply the Ingress resource to your EKS cluster:
+
+```bash
+kubectl apply -f ingress.yaml
+```
+
+### 3. **Check the ALB Creation:**
+
+Once the Ingress is applied, the AWS Load Balancer Controller should create the ALB. This may take a few minutes.
+
+To verify the status of the Ingress:
+
+```bash
+kubectl get ingress my-ingress -o wide
+```
+
+The output should show the ALB DNS name once it's created.
+
+### 4. **Verify in AWS Console:**
+
+After a few minutes, go to the **EC2 > Load Balancers** section of your AWS Management Console. You should see the newly created ALB there.
+
+If you're still not seeing the ALB, let me know, and we can troubleshoot further!

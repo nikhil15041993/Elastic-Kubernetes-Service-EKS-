@@ -65,3 +65,14 @@ record the output of ```token:```
 * open browser at `http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/#!/login`
 
 and choose _token_ as login method, where you have to provide the token you recorded two steps before
+
+
+
+Install the Metrics Server using the following commands:
+```
+kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+```
+Verify that the Metrics Server is running:
+```
+kubectl get deployment metrics-server -n kube-system
+```

@@ -1,0 +1,123 @@
+## Step 1: Store Credentials in SSM Parameter Store
+```
+aws ssm put-parameter --name "db-username" --value "myUser" --type SecureString
+aws ssm put-parameter --name "db-password" --value "myPassword" --type SecureString
+```
+## Step 2: Install the External Secrets Operator in Kubernetes
+The External Secrets Operator allows Kubernetes to pull secrets from AWS Parameter Store and inject them into pods.
+
+Apply the installation manifest for External Secrets Operator:
+```
+kubectl apply -f https://github.com/external-secrets/external-secrets/releases/latest/download/install.yaml
+```
+## Step 3: Create an IAM Role for EKS to Access SSM
+
+### Create an IAM Policy
+Create an IAM policy that defines the permissions your pods will need. This policy should allow access to the SSM parameters you stored earlier.
+
+Example IAM policy JSON (you can create this using the AWS Management Console or AWS CLI):
+```
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "ssm:GetParameter",
+        "ssm:GetParameters",
+        "ssm:GetParameterHistory"
+      ],
+      "Resource": "arn:aws:ssm:REGION:ACCOUNT_ID:parameter/db-*"
+    }
+  ]
+}
+```
+Name your policy (e.g., EKS-SSM-Access) and create it.
+### Create an IAM Role for the EKS Service Account
+Create an IAM role for your EKS service account. You can do this using the AWS Management Console or AWS CLI.
+Log in to the AWS Management Console.
+Navigate to the IAM service by searching for "IAM" in the AWS services search bar.
+Create a New Role
+Select Trusted Entity
+Choose Trusted Entity:
+Select Web identity.
+Configure Web Identity:
+Identity provider: Choose the OpenID Connect (OIDC) provider for EKS. If you haven’t created the OIDC provider yet, you’ll need to do that first (EKS automatically creates this for you when you create a cluster).
+Audience: This is usually the name of your EKS cluster.
+
+Your trust policy should look similar to this:
+```
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Federated": "arn:aws:iam::ACCOUNT_ID:oidc-provider/oidc.eks.REGION.amazonaws.com/id/CLUSTER_OIDC_ID"
+      },
+      "Action": "sts:AssumeRoleWithWebIdentity",
+      "Condition": {
+        "StringEquals": {
+          "oidc.eks.REGION.amazonaws.com/id/CLUSTER_OIDC_ID:sub": "system:serviceaccount:default:external-secrets-sa"
+        }
+      }
+    }
+  ]
+}
+```
+After setting up the trust policy, click Next: Permissions.
+Attach the necessary permissions for your service account. You can create a new policy or select an existing one that grants access to the AWS services your application needs (like ssm:GetParameter, ssm:GetParameters, etc.)
+
+```Attach the IAM policy you created earlier to this role:```
+
+## Step 4: Create a Kubernetes Service Account with IAM Role
+
+Create a Kubernetes service account that is associated with the IAM role you just created. You can do this using a YAML file:
+```
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: external-secrets-sa
+  namespace: default
+  annotations:
+    eks.amazonaws.com/role-arn: arn:aws:iam::ACCOUNT_ID:role/MyEKSRole
+```
+Apply this YAML file to create the service account:
+
+## Update Your Deployment to Use the Service Account
+
+```
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: db-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: my-app
+  template:
+    metadata:
+      labels:
+        app: my-app
+    spec:
+      serviceAccountName: external-secrets-sa  # Specify the service account here
+      containers:
+      - name: my-app
+        image: my-db-app
+        env:
+        - name: DB_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: db-credentials
+              key: username
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: db-credentials
+              key: password
+
+```
+
+
+
